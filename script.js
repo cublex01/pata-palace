@@ -13,6 +13,87 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Initialize modules
+    function initializeModules() {
+        // Load our JavaScript modules
+        loadScript('js/cart/cart.js')
+            .then(() => loadScript('js/email/emailHandler.js'))
+            .then(() => {
+                console.log('All modules loaded successfully');
+                // Dark mode has been removed as requested
+            })
+            .catch(error => {
+                console.error('Error loading modules:', error);
+            });
+    }
+    
+    // Helper function to load scripts dynamically
+    function loadScript(src) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => resolve();
+            script.onerror = () => reject(new Error(`Script load error for ${src}`));
+            document.head.appendChild(script);
+        });
+    }
+    
+    // Initialize all modules
+    initializeModules();
+    
+    // Bank payment functionality
+    // Handle payment method change
+    const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
+    const bankDetailsSection = document.getElementById('bankDetailsSection');
+    
+    if (paymentRadios && bankDetailsSection) {
+        paymentRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Show/hide bank details section based on selected payment method
+                if (this.value === 'bank') {
+                    bankDetailsSection.style.display = 'block';
+                } else {
+                    bankDetailsSection.style.display = 'none';
+                }
+            });
+        });
+    }
+    
+    // Handle checkout form submission
+    const checkoutForm = document.getElementById('checkoutForm');
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Generate random order number
+            const orderNumber = Math.floor(10000 + Math.random() * 90000);
+            document.getElementById('orderNumber').textContent = orderNumber;
+            
+            // Get selected payment method
+            const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            
+            // Get total amount from orderTotal
+            const totalAmount = document.getElementById('orderTotal').textContent;
+            
+            // Show bank details in confirmation if bank transfer selected
+            if (selectedPaymentMethod === 'bank') {
+                const confirmationBankDetails = document.getElementById('confirmationBankDetails');
+                if (confirmationBankDetails) {
+                    confirmationBankDetails.style.display = 'block';
+                    document.getElementById('bankTransferAmount').textContent = totalAmount;
+                    document.getElementById('bankTransferReference').textContent = orderNumber;
+                }
+            }
+            
+            // Hide checkout modal and show confirmation modal
+            const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+            const confirmationModal = new bootstrap.Modal(document.getElementById('orderConfirmationModal'));
+            
+            checkoutModal.hide();
+            confirmationModal.show();
+        });
+    }
+    
     // Close mobile menu when clicking on a nav link
     const navLinks = document.querySelectorAll('.nav-link');
     navLinks.forEach(link => {
@@ -31,54 +112,57 @@ document.addEventListener('DOMContentLoaded', function() {
     // Product database - simulating product details
     const productDetails = {
         1: {
-            name: "Patat",
-            image: "/fotos/Fries-box.png",
-            description: "Onze heerlijke, knapperige patat wordt gemaakt van zorgvuldig geselecteerde aardappelen. We bereiden onze patat volgens een traditioneel receptuur, wat resulteert in een perfect knapperige buitenkant en een zachte, fluffy binnenkant.",
-            ingredients: "Aardappelen, plantaardige olie, zout",
-            price: "€2,50 - €4,50 (afhankelijk van formaat)",
-            prepTime: "3-4 minuten"
+            name: "Fries",
+            image: "https://www.pngarts.com/files/3/Fries-PNG-Photo.png",
+            description: "Our delicious, crispy fries are made from carefully selected potatoes. We prepare our fries according to a traditional recipe, resulting in a perfectly crispy exterior and a soft, fluffy interior.",
+            ingredients: "Potatoes, vegetable oil, salt",
+            price: "€2.50 - €4.50 (depending on size)",
+            prepTime: "3-4 minutes"
         },
         2: {
-            name: "Frikandel",
-            image: "/fotos/Frenchf.png",
-            description: "Onze beroemde frikandellen worden gemaakt volgens een geheim recept. Ze worden perfect gekruid en zijn altijd vers bereid. Ideaal om te combineren met onze heerlijke patat en mayonaise.",
-            ingredients: "Kippenvlees, kruiden, specerijen",
-            price: "€1,75 per stuk",
-            prepTime: "3-5 minuten"
+            name: "Dutch Sausage",
+            image: "https://www.pngarts.com/files/3/French-Fries-PNG-Image.png",
+            description: "Our famous Dutch sausages are made according to a secret recipe. They are perfectly seasoned and always freshly prepared. Ideal to combine with our delicious fries and mayonnaise.",
+            ingredients: "Chicken meat, herbs, spices",
+            price: "€1.75 each",
+            prepTime: "3-5 minutes"
         },
         3: {
-            name: "Kaassoufflé",
-            image: "/fotos/Frenchg.png",
-            description: "Een heerlijke kaassoufflé met gesmolten kaas binnenin. Perfect voor de echte kaasliefhebber. Het krokante laagje aan de buitenkant en de romige kaas aan de binnenkant maken dit een populaire snack.",
-            ingredients: "Bloem, kaas (48%), plantaardig vet, water, zout, kruiden",
-            price: "€1,90 per stuk",
-            prepTime: "4 minuten"
+            name: "Cheese Soufflé",
+            image: "https://www.pngarts.com/files/3/Fries-PNG-Download-Image.png",
+            description: "A delicious cheese soufflé with melted cheese inside. Perfect for true cheese lovers. The crispy layer on the outside and the creamy cheese on the inside make this a popular snack.",
+            ingredients: "Flour, cheese (48%), vegetable fat, water, salt, herbs",
+            price: "€1.90 each",
+            prepTime: "4 minutes"
         },
         4: {
-            name: "Kroket",
-            image: "/fotos/Frenchg.png",
-            description: "Onze kroketten hebben een knapperige buitenkant en een romige, smaakvolle ragout binnenin. Een Nederlandse klassieker die bij ons perfect wordt bereid voor een ultieme snackervaring.",
-            ingredients: "Rundvlees, bloem, boter, melk, paneermeel, kruiden",
-            price: "€2,10 per stuk",
-            prepTime: "4-5 minuten"
+            name: "Croquette",
+            image: "https://www.pngarts.com/files/3/French-Fries-PNG-Free-Download.png",
+            description: "Our croquettes have a crispy exterior and a creamy, flavorful ragout inside. A Dutch classic that is perfectly prepared at our place for the ultimate snack experience.",
+            ingredients: "Beef, flour, butter, milk, breadcrumbs, herbs",
+            price: "€2.10 each",
+            prepTime: "4-5 minutes"
         },
         5: {
-            name: "Bitterballen",
-            image: "/fotos/Frenchbl.png",
-            description: "Onze bitterballen zijn perfect rond en hebben een knapperige korst met een zachte, romige vulling. Deze klassieke Nederlandse snack is perfect voor bij een drankje of als onderdeel van een grotere bestelling.",
-            ingredients: "Rundvlees, bloem, boter, bouillon, paneermeel, kruiden",
-            price: "€4,50 (8 stuks)",
-            prepTime: "4-5 minuten"
+            name: "Dutch Meatballs",
+            image: "https://www.pngarts.com/files/3/French-Fries-PNG-Image-Background.png",
+            description: "Our Dutch meatballs are perfectly round and have a crispy crust with a soft, creamy filling. This classic Dutch snack is perfect with a drink or as part of a larger order.",
+            ingredients: "Beef, flour, butter, broth, breadcrumbs, herbs",
+            price: "€4.50 (8 pieces)",
+            prepTime: "4-5 minutes"
         },
         6: {
-            name: "Kipnuggets",
-            image: "/fotos/Friesa.png",
-            description: "Onze kipnuggets zijn gemaakt van puur kipfilet, gekruid en gefrituurd tot perfectie. Ze zijn krokant aan de buitenkant en sappig aan de binnenkant, perfect voor liefhebbers van kip.",
-            ingredients: "Kipfilet (85%), paneermeel, plantaardige olie, kruiden",
-            price: "€4,75 (6 stuks)",
-            prepTime: "4-5 minuten"
+            name: "Chicken Nuggets",
+            image: "https://www.pngarts.com/files/3/French-Fries-PNG-High-Quality-Image.png",
+            description: "Our chicken nuggets are made from pure chicken breast, seasoned and fried to perfection. They are crispy on the outside and juicy on the inside, perfect for chicken lovers.",
+            ingredients: "Chicken breast (85%), breadcrumbs, vegetable oil, herbs",
+            price: "€4.75 (6 pieces)",
+            prepTime: "4-5 minutes"
         }
     };
+    
+    // Make productDetails available globally
+    window.productDetails = productDetails;
     
     // Add click event to each product card
     productCards.forEach(card => {
@@ -94,8 +178,15 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('modalProductPrice').textContent = product.price;
             document.getElementById('modalProductPrepTime').textContent = product.prepTime;
             
+            // Set product ID for the Add to Cart button in the modal
+            const modalAddToCartBtn = document.getElementById('modalAddToCartBtn');
+            modalAddToCartBtn.dataset.productId = productId;
+            
             // Show the modal
             productModal.show();
         });
     });
+    
+    // Initialize all modules
+    initializeModules();
 });
