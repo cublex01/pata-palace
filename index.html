@@ -124,19 +124,21 @@
 
     <!-- Contact -->
     <section class="contact" id="contact">
-        <div class="wrap narrow">
+        <div class="wrap">
             <div class="section-head">
                 <h2 data-i18n="contact.title">Neem contact op</h2>
                 <p class="muted" data-i18n="contact.sub">Vragen of opmerkingen? Stuur ons een bericht.</p>
             </div>
-            <form id="contactForm" class="form card-box" novalidate>
-                <div class="field">
-                    <label for="cName" data-i18n="contact.name">Naam</label>
-                    <input id="cName" name="name" type="text" autocomplete="name" required>
-                </div>
-                <div class="field">
-                    <label for="cEmail" data-i18n="contact.email">E-mail</label>
-                    <input id="cEmail" name="email" type="email" autocomplete="email" required>
+            <form id="contactForm" class="form card-box contact-form" novalidate>
+                <div class="field two">
+                    <div>
+                        <label for="cName" data-i18n="contact.name">Naam</label>
+                        <input id="cName" name="name" type="text" autocomplete="name" required>
+                    </div>
+                    <div>
+                        <label for="cEmail" data-i18n="contact.email">E-mail</label>
+                        <input id="cEmail" name="email" type="email" autocomplete="email" required>
+                    </div>
                 </div>
                 <div class="field">
                     <label for="cMessage" data-i18n="contact.message">Bericht</label>
@@ -144,7 +146,7 @@
                 </div>
                 <!-- Honeypot: people never see or fill this -->
                 <input class="hp" id="cWebsite" name="_honey" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
-                <button id="cSend" class="btn primary" type="submit" data-i18n="contact.send">Versturen</button>
+                <button id="cSend" class="btn primary send-btn" type="submit" data-i18n="contact.send">Versturen</button>
                 <p id="formMsg" class="form-msg" role="status" aria-live="polite"></p>
             </form>
         </div>

@@ -259,6 +259,17 @@ input:focus, textarea:focus { outline: none; border-color: var(--red); }
 input.invalid, textarea.invalid { border-color: var(--red); background: var(--invalid-bg); }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .form-msg { min-height: 1.4em; font-weight: 600; }
+.contact-form { padding: 34px 38px; gap: 20px; border: 1px solid var(--line); border-top: 5px solid var(--red); }
+.contact-form textarea { min-height: 170px; resize: vertical; }
+.contact-form input[type="text"], .contact-form input[type="email"], .contact-form textarea { padding: 14px 16px; border-radius: 14px; }
+.contact-form .field.two { gap: 20px; }
+.contact-form .send-btn { justify-self: end; min-width: 220px; padding: 14px 34px; }
+.contact-form .form-msg { text-align: right; margin: -6px 0 0; }
+@media (max-width: 720px) {
+    .contact-form { padding: 22px 18px; }
+    .contact-form .send-btn { justify-self: stretch; min-width: 0; }
+    .contact-form .form-msg { text-align: left; }
+}
 .form-msg.ok { color: var(--ok-fg); }
 .form-msg.err { color: var(--accent-text); }
 
